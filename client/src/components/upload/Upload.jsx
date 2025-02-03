@@ -22,7 +22,7 @@ const authenticator = async () => {
         throw new Error(`Authentication request failed: ${error.message}`);
     }
 };
-const Upload = ({setImg}) => {
+const Upload = ({ setImg }) => {
     const ikUploadRef = useRef(null);
 
     const onError = (err) => {
@@ -39,8 +39,18 @@ const Upload = ({setImg}) => {
     };
 
     const onUploadStart = (evt) => {
-        console.log('Start', evt);
-        setImg((prev) => ({ ...prev, isLoading: true }));
+        const file = evt.target.files[0];
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImg((prev)=> ({...prev, isLoading:true, aiData:{
+                inlineData:{
+                    data: reader.result.split(",")[1],
+                    mimeType: file.type,
+                }
+            }}));
+        };
+        reader.readAsDataURL(file);
     };
     return (
         <IKContext
@@ -55,7 +65,7 @@ const Upload = ({setImg}) => {
                 useUniqueFileName={true}
                 onUploadProgress={onUploadProgress}
                 onUploadStart={onUploadStart}
-                style={{display: "none"}}
+                style={{ display: 'none' }}
                 ref={ikUploadRef}
             />
             {
