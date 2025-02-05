@@ -26,7 +26,7 @@ const ChatPage = () => {
                         : error
                         ? 'Something went wrong!'
                         : data?.history?.map((message, i) => (
-                              <>
+                              <div key={i}>
                                   {message.img && (
                                       <IKImage
                                           urlEndpoint={
@@ -55,7 +55,7 @@ const ChatPage = () => {
                                           {message.parts[0].text}
                                       </Markdown>
                                   </div>
-                              </>
+                              </div>
                           ))}
                     {data && <NewPrompt data={data} />}
                 </div>
